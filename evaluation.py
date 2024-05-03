@@ -571,7 +571,11 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
             db_name = db
             db = os.path.join(db_dir, db, db + ".sqlite")
             schema = Schema(get_schema(db))
-            g_sql = get_sql(schema, g_str)
+            try:
+                g_sql = get_sql(schema, g_str)
+            except Exception as e:
+                print(f"Skipping [{i}]")
+                continue
             hardness = evaluator.eval_hardness(g_sql)
             if idx > 3:
                 idx = "> 4"
